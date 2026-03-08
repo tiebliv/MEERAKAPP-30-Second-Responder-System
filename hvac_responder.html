@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meerakapp™ 30-Second Responder System</title>
+    <style>
+        :root {
+            --bg: #F9FAFB;
+            --header-bg: #111827;
+            --card-bg: #FFFFFF;
+            --primary: #2563EB;
+            --primary-hover: #1E40AF;
+            --accent: #F97316;
+            --border: #E5E7EB;
+            --text: #111827;
+            --text-muted: #6B7280;
+            --text-light: #9CA3AF;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: var(--header-bg);
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            font-size: 1.875rem;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+        }
+
+        header p {
+            color: #93C5FD;
+            margin-top: 0.5rem;
+            font-weight: 500;
+        }
+
+        main {
+            max-width: 48rem;
+            margin: 3rem auto;
+            padding: 0 1rem;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 1rem;
+            border: 1px solid var(--border);
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .card-content {
+            padding: 2rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 640px) {
+            .grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+        }
+
+        input[type="text"], select {
+            width: 100%;
+            padding: 0.625rem 1rem;
+            background-color: #F9FAFB;
+            border: 1px solid #E5E7EB;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        input[type="text"]:focus, select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.25rem;
+        }
+
+        .radio-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-top: 0.5rem;
+        }
+
+        .actions {
+            margin-top: 2.5rem;
+            display: flex;
+            gap: 1rem;
+        }
+
+        button {
+            cursor: pointer;
+            font-weight: 700;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            border: none;
+        }
+
+        .btn-primary {
+            flex: 1;
+            background-color: var(--primary);
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .btn-outline {
+            background-color: white;
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+        }
+
+        .btn-outline:hover {
+            background-color: #F9FAFB;
+        }
+
+        .output-section {
+            display: none;
+            border-top: 1px solid #F3F4F6;
+            background-color: #F9FAFB;
+            padding: 2rem;
+        }
+
+        .output-header {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+        }
+
+        .variation-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .variation-card {
+            background-color: white;
+            border: 2px solid transparent;
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .variation-card.selected {
+            border-color: var(--primary);
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+
+        .variation-id {
+            width: 1.5rem;
+            height: 1.5rem;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-light);
+            flex-shrink: 0;
+        }
+
+        .variation-card.selected .variation-id {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        .variation-text {
+            font-size: 0.9375rem;
+            flex: 1;
+        }
+
+        .variation-meta {
+            margin-top: 0.75rem;
+            display: flex;
+            gap: 1rem;
+            font-size: 0.625rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-light);
+        }
+
+        .sms-friendly {
+            color: #10B981;
+        }
+
+        .copy-btn-container {
+            margin-top: 2rem;
+        }
+
+        .btn-copy {
+            width: 100%;
+            background-color: var(--header-bg);
+            color: white;
+            padding: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-copy:hover {
+            background-color: #000000;
+        }
+
+        .btn-copy.success {
+            background-color: #10B981;
+        }
+
+        footer {
+            margin-top: 2rem;
+            text-align: center;
+            color: var(--text-light);
+            font-size: 0.75rem;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1 style="text-transform: uppercase; font-size: 2.5rem; font-weight: 900; margin-bottom: 0;">MEERAKAPP<span style="font-size: 0.8rem; font-weight: 300; vertical-align: super; margin-left: 2px; opacity: 0.8;">™</span></h1>
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-top: 0; margin-bottom: 0.5rem; opacity: 0.9;">30-Second Responder System</h2>
+        <p>Turn missed calls into booked jobs in 30 seconds.</p>
+    </header>
+
+    <main>
+        <div class="card">
+            <div class="card-content">
+                <div class="grid">
+                    <div class="form-group">
+                        <label for="companyName">Company Name</label>
+                        <input type="text" id="companyName" placeholder="e.g. Arctic Air">
+                    </div>
+                    <div class="form-group">
+                        <label for="repName">Rep Name</label>
+                        <input type="text" id="repName" placeholder="e.g. Mike">
+                    </div>
+                    <div class="form-group">
+                        <label for="customerName">Customer Name</label>
+                        <input type="text" id="customerName" placeholder="e.g. Sarah">
+                    </div>
+                    <div class="form-group">
+                        <label for="city">City (Optional)</label>
+                        <input type="text" id="city" placeholder="e.g. Austin">
+                    </div>
+                    <div class="form-group">
+                        <label for="issue">Issue</label>
+                        <select id="issue">
+                            <option value="AC not cooling">AC not cooling</option>
+                            <option value="No heat">No heat</option>
+                            <option value="Strange noise">Strange noise</option>
+                            <option value="Maintenance">Maintenance</option>
+                            <option value="Quote request">Quote request</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group hidden" id="otherIssueContainer">
+                        <label for="otherIssue">Describe Issue</label>
+                        <input type="text" id="otherIssue" placeholder="e.g. Leaking water">
+                    </div>
+                    <div class="form-group">
+                        <label for="urgency">Urgency</label>
+                        <select id="urgency">
+                            <option value="ASAP">ASAP</option>
+                            <option value="Today">Today</option>
+                            <option value="Tomorrow">Tomorrow</option>
+                            <option value="This week">This week</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Tone</label>
+                        <div class="radio-group">
+                            <label class="radio-item">
+                                <input type="radio" name="tone" value="Friendly" checked> Friendly
+                            </label>
+                            <label class="radio-item">
+                                <input type="radio" name="tone" value="Professional"> Professional
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="checkbox-item">
+                            <input type="checkbox" id="humanTouch" checked> Add slight human touch
+                        </label>
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <button id="generateBtn" class="btn-primary">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"></path><path d="M21 3v5h-5"></path></svg>
+                        Generate
+                    </button>
+                    <button id="clearBtn" class="btn-outline">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path></svg>
+                        Clear
+                    </button>
+                </div>
+            </div>
+
+            <div id="outputSection" class="output-section">
+                <div class="output-header">Generated Variations</div>
+                <div id="variationList" class="variation-list">
+                    <!-- Variations will be injected here -->
+                </div>
+
+                <div class="copy-btn-container">
+                    <button id="copyBtn" class="btn-copy">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>
+                        Copy Selected Message
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>@Meerakapp™ 30-Second Responder System</p>
+        </footer>
+    </main>
+
+    <script>
+        const companyInput = document.getElementById('companyName');
+        const repInput = document.getElementById('repName');
+        const customerInput = document.getElementById('customerName');
+        const cityInput = document.getElementById('city');
+        const issueSelect = document.getElementById('issue');
+        const otherIssueContainer = document.getElementById('otherIssueContainer');
+        const otherIssueInput = document.getElementById('otherIssue');
+        const urgencySelect = document.getElementById('urgency');
+        const humanTouchCheckbox = document.getElementById('humanTouch');
+        const generateBtn = document.getElementById('generateBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const outputSection = document.getElementById('outputSection');
+        const variationList = document.getElementById('variationList');
+        const copyBtn = document.getElementById('copyBtn');
+
+        let variations = [];
+        let selectedId = null;
+
+        issueSelect.addEventListener('change', () => {
+            if (issueSelect.value === 'Other') {
+                otherIssueContainer.classList.remove('hidden');
+            } else {
+                otherIssueContainer.classList.add('hidden');
+            }
+        });
+
+        clearBtn.addEventListener('click', () => {
+            companyInput.value = '';
+            repInput.value = '';
+            customerInput.value = '';
+            cityInput.value = '';
+            issueSelect.value = 'AC not cooling';
+            otherIssueInput.value = '';
+            otherIssueContainer.classList.add('hidden');
+            urgencySelect.value = 'Today';
+            document.querySelector('input[name="tone"][value="Friendly"]').checked = true;
+            humanTouchCheckbox.checked = true;
+            outputSection.style.display = 'none';
+            variations = [];
+            selectedId = null;
+        });
+
+        const templates = [
+            (c, r, cust, i, u, t, h, cityVal) => {
+                const opener = h ? `Hey ${cust}—it’s ${r} with ${c}.` : `Hi ${cust}, this is ${r} from ${c}.`;
+                const cityMention = cityVal && Math.random() > 0.5 ? ` here in ${cityVal}` : '';
+                const body = `Saw your ${i} come through${cityMention}. We can get someone out ${u}.`;
+                const closing = `Does that work for you?`;
+                const emoji = (h && t === 'Friendly') ? ' 🛠️' : '';
+                return `${opener} ${body} ${closing}${emoji}`;
+            },
+            (c, r, cust, i, u, t, h, cityVal) => {
+                const opener = h ? `${cust}, it's ${r} at ${c}.` : `Hello ${cust}, ${r} here from ${c}.`;
+                const body = `Got your ${i}. I'm looking at our schedule for ${u}.`;
+                const closing = `Should I put you down for a visit?`;
+                return `${opener} ${body} ${closing}`;
+            },
+            (c, r, cust, i, u, t, h, cityVal) => {
+                const opener = h ? `Hi ${cust}! ${r} with ${c} here.` : `Hi ${cust}, this is ${r} from ${c}.`;
+                const body = `About that ${i}… we have a tech available ${u} if you'd like us to take a look.`;
+                const closing = `Want me to lock that in?`;
+                const emoji = (h && t === 'Friendly') ? ' 👍' : '';
+                return `${opener} ${body} ${closing}${emoji}`;
+            },
+            (c, r, cust, i, u, t, h, cityVal) => {
+                const opener = h ? `Hey ${cust}, ${r} from ${c}.` : `${cust}, this is ${r} with ${c}.`;
+                const body = `Saw your ${i} come through. We can definitely help you out ${u}.`;
+                const closing = `Are you going to be around then?`;
+                return `${opener} ${body} ${closing}`;
+            },
+            (c, r, cust, i, u, t, h, cityVal) => {
+                const opener = h ? `${cust}—${r} here with ${c}.` : `Hi ${cust}, ${r} from ${c} calling back.`;
+                const body = `Got your ${i}. I can get a tech to your place ${u}.`;
+                const closing = `Does that timing work for you?`;
+                return `${opener} ${body} ${closing}`;
+            },
+            (c, r, cust, i, u, t, h, cityVal) => {
+                const opener = h ? `Hi ${cust}, it's ${r} from ${c}.` : `Hello ${cust}, this is ${r} with ${c}.`;
+                const body = `About that ${i}… we have an opening ${u} to come check it out.`;
+                const closing = `Would you like that spot?`;
+                return `${opener} ${body} ${closing}`;
+            }
+        ];
+
+        generateBtn.addEventListener('click', () => {
+            const companyName = companyInput.value.trim();
+            const repName = repInput.value.trim();
+            const customerName = customerInput.value.trim();
+            const city = cityInput.value.trim();
+            const issue = issueSelect.value;
+            const otherIssue = otherIssueInput.value.trim();
+            const urgency = urgencySelect.value;
+            const tone = document.querySelector('input[name="tone"]:checked').value;
+            const humanTouch = humanTouchCheckbox.checked;
+
+            if (!companyName || !repName || !customerName) {
+                alert('Please fill in Company, Rep, and Customer names.');
+                return;
+            }
+
+            const actualIssue = issue === 'Other' ? otherIssue : issue;
+            const urgencyText = urgency === 'ASAP' ? 'right away' : urgency.toLowerCase();
+
+            // Shuffle and pick 3
+            const shuffled = [...templates].sort(() => 0.5 - Math.random());
+            const selected = shuffled.slice(0, 3);
+
+            variations = selected.map((tpl, idx) => ({
+                id: String.fromCharCode(65 + idx),
+                text: tpl(companyName, repName, customerName, actualIssue, urgencyText, tone, humanTouch, city)
+            }));
+
+            renderVariations();
+            outputSection.style.display = 'block';
+            outputSection.classList.add('animate-fade-in');
+            selectedId = 'A';
+            updateSelection();
+        });
+
+        function renderVariations() {
+            variationList.innerHTML = '';
+            variations.forEach(v => {
+                const card = document.createElement('div');
+                card.className = 'variation-card';
+                card.dataset.id = v.id;
+                card.innerHTML = `
+                    <div class="variation-id">${v.id}</div>
+                    <div class="variation-text">
+                        <p>${v.text}</p>
+                        <div class="variation-meta">
+                            <span>${v.text.length} Characters</span>
+                            ${v.text.length <= 320 ? '<span class="sms-friendly">SMS Friendly</span>' : ''}
+                        </div>
+                    </div>
+                `;
+                card.addEventListener('click', () => {
+                    selectedId = v.id;
+                    updateSelection();
+                });
+                variationList.appendChild(card);
+            });
+        }
+
+        function updateSelection() {
+            document.querySelectorAll('.variation-card').forEach(card => {
+                if (card.dataset.id === selectedId) {
+                    card.classList.add('selected');
+                } else {
+                    card.classList.remove('selected');
+                }
+            });
+        }
+
+        copyBtn.addEventListener('click', () => {
+            const selected = variations.find(v => v.id === selectedId);
+            if (selected) {
+                navigator.clipboard.writeText(selected.text).then(() => {
+                    const originalText = copyBtn.innerHTML;
+                    copyBtn.innerHTML = 'Copied to Clipboard!';
+                    copyBtn.classList.add('success');
+                    setTimeout(() => {
+                        copyBtn.innerHTML = originalText;
+                        copyBtn.classList.remove('success');
+                    }, 2000);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
